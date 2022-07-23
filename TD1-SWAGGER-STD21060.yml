@@ -1,0 +1,339 @@
+
+openapi: 3.0.1
+info:
+  title: STD21060 API
+  description: Global description of my API
+  version: 1.0.0
+servers:
+  - url: https://STD21060.com
+tags:
+  - name: Students
+  - name: Courses
+paths:
+  /students:
+    get:
+      tags:
+        - Students
+      operationId: getStudents
+      summary: Get all students
+      description: Get all students with details
+      responses:
+        '200':
+          description: List of students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+        '400':
+          description: Bad request
+    post:
+      tags:
+        - Students
+      operationId: createStudent
+      summary: Create new student
+      description: Create new student
+      requestBody:
+        description: Student to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStudent'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentId'
+        '400':
+          description: Bad request
+  
+  /students/{id}:
+    get:
+      tags:
+        - Students
+      operationId: getStudentById
+      summary: Get all students
+      description: Get all students with details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+        '400':
+          description: Bad request
+    put:
+      tags:
+        - Students
+      operationId: Change all information
+      summary: Change information student
+      description: Change information student
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Student to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStudent'
+        required: true
+      responses:
+        '204':
+          description: Update
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentId'
+        '400':
+          description: Bad request
+    patch:
+      tags:
+        - Students
+      operationId: Change one or more information
+      summary: Change one or more student's information
+      description: |
+        Changes options : 
+        * name: change
+        * birth_date: change
+        * add : change
+        * phoneNumber: add
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: New values for the student
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateStudent"
+            examples:
+              changeTheName:
+                summary: Change name
+                description: Change student's name
+                value:
+                  name: "name"
+              ChangeTheBirthDate:
+                summary: ChangeBirth_date
+                description: Change student's birth_date
+                value:
+                  birth_date: new birth_date
+              ChangeNameBirth:
+                summary: Change name and Birthdate
+                description: Change student's name and birthdate
+                value:
+                  name: "name"
+                  birth_date: new birth_date
+              AddPhoneNumber:
+                summary: Add phone number
+                description: Add phone number
+                value:
+                  phoneNumbers:
+                    - number: "0340000000"
+                      country_code: "261"
+                    - number: "0320000000"
+                      country_code: "261"
+
+      responses:
+        204:
+          description: update
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+              examples:
+                changeNameBirth:
+                  summary: Name and Birthdate changed
+                  description: Name and Birthdate changed
+                  value:
+                    id: 01
+                    name: Rakoto
+                    birth_date: "2022-01-01"
+                addPhoneNum:
+                  summary: Phone number added
+                  description: WPhone number added
+                  value:
+                    id: 01
+                    name: Rakoto
+                    birth_date: "2022-01-01"
+                    phoneNumber: "0320000000"
+        '400':
+          description: Bad request
+          
+    delete:
+      tags:
+        - Students
+      operationId: Delete student
+      summary: Delete student
+      description: Delete student
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Delete success      
+  
+  /courses:
+    get:
+      tags:
+        - Courses
+      summary: Get all list courses
+      description: Get courses
+      operationId: get list courses\
+      parameters:
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: page-size
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Course'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                example:
+                  code: 400_bad_request
+                  message: Parameter are missing
+    post:
+        tags:
+          - Courses
+        operationId: createCourses
+        summary: Create new courses
+        description: Create new student
+        requestBody:
+          description: Courses to be created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCourses'
+          required: true
+        responses:
+          '201':
+            description: Created
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/CourseId'
+          '400':
+            description: Bad request                
+  /courses/{id}:                
+    get:
+      tags:
+        - Courses
+      summary: Get Specified courses
+      description: Get Specified courses
+      operationId: Get Specified courses
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of courses
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseId'
+        '400':
+          description: Bad request
+  
+components:
+  schemas:
+    CreateStudent:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Rakoto
+        birth_date:
+          type: string
+          format: date
+          example: '2022-01-01'
+    Student:
+      allOf:
+        - $ref: '#/components/schemas/CreateStudent'
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+    StudentId:
+      allOf:
+        - $ref: '#/components/schemas/CreateStudent'
+      properties:
+        id:
+          type: integer
+          example: 10
+    CreateCourses:
+      type: object
+      properties:
+        name:
+          type: string
+          example: EL1P1
+        teacher:
+          type: string
+          example: Rakoto
+        created_date_time:
+          type: string
+          format: date
+          example: '2022-01-01' 
+        id:
+          type: integer
+          example: 10
+    Course:
+      allOf:
+        - $ref: '#/components/schemas/CreateCourses'
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+    CourseId:
+      allOf:
+        - $ref: '#/components/schemas/CreateCourses'
+      properties:
+        id:
+          type: integer
+          example: 10
+    
+       
