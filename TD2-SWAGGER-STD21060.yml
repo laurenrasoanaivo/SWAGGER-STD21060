@@ -1,0 +1,234 @@
+
+openapi: 3.0.1
+info:
+  title: STD21060 API
+  description: Global description of my API
+  version: 1.0.0
+servers:
+  - url: https://virtserver.swaggerhub.com/laurenrasoanaivo/TD2-SWAGGE-STD21060/1.0.0
+tags:
+  - name: Rooms
+  - name: Films
+  - name: Projections
+paths:
+  /films:
+    get:
+      tags:
+        - Films
+      operationId: getFilms
+      summary: Get all films
+      description: Get all films with details
+      responses:
+        '200':
+          description: List of films
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Film'
+        '400':
+          description: Bad request
+    post:
+      tags:
+        - Films
+      operationId: createFilm
+      summary: Create new flm
+      description: Create new film
+      requestBody:
+        description: Film to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFilm'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateFilm'
+        '400':
+          description: Bad request  
+  
+    delete:
+      tags:
+        - Films
+      operationId: Delete film
+      summary: Delete film
+      description: Delete film
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Delete success      
+  
+  /projections:
+    get:
+      tags:
+        - Projections
+      summary: Get all list projections
+      description: Get projection
+      operationId: get list projections
+      responses:
+        '200':
+          description: List of projection
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Projection'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                example:
+                  code: 400_bad_request
+    post:
+        tags:
+          - Projections
+        operationId: createProjection
+        summary: Create new projection
+        description: Create new student
+        requestBody:
+          description: projection to be created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateProjection'
+          required: true
+        responses:
+          '201':
+            description: Created
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Projection'
+          '400':
+            description: Bad request      
+    delete:
+      tags:
+        - Projections
+      operationId: Delete projection
+      summary: Delete projection
+      description: Delete projection
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Delete success                 
+  /rooms:                
+    get:
+      tags:
+        - Rooms
+      summary: Get list rooms
+      description: Get list rooms
+      operationId: Get list rooms
+      responses:
+        '200':
+          description: List of rooms
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: '#/components/schemas/rooms'
+        '400':
+          description: Bad request
+    post:
+      tags:
+         - Rooms
+      summary: Create rooms
+      description: Create rooms
+      operationId: Create rooms
+      requestBody:
+          description: rooms to be created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Createrooms'
+          required: true
+      responses:
+        '200':
+          description: Create rooms
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rooms'
+        '400':
+          description: Bad request 
+  
+components:
+  schemas:
+    CreateFilm:
+      type: object
+      properties:
+        title:
+          type: string
+          example: L'arbre
+        duree:
+          type: string
+          format: time
+          example: '01:00:00'
+        resume:
+          type: string
+          example: 'Foret'
+        realisateur: 
+          type: string
+          example: Rakoto
+        date_de_sortie:
+          type: string
+          example: '2022-01-01'
+    Film:
+      allOf:
+        - $ref: '#/components/schemas/CreateFilm'
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+    rooms:
+      allOf:
+        - $ref: '#/components/schemas/Createrooms'
+      properties:
+        id:
+          type: integer
+          example: 10
+    Createrooms:
+      type: object
+      properties:
+        rooms:  
+          type: string
+          example: 'A'
+        capacity:
+          type: integer
+          example: 40
+    Projection:
+      allOf:
+        - $ref: '#/components/schemas/CreateProjection'
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+    CreateProjection:
+      type: object
+      properties:
+        film:
+          type: string
+          example: 'arbre'
+        rooms:
+          type: string
+          example: 'A'
+    
+       
