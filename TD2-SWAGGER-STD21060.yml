@@ -1,14 +1,10 @@
 openapi: 3.0.1
 info:
-  title: STD2106-TD2
+  title: STD21060-TD2
   version: 1.0.0
 servers:
-- url: https://STD21060.io
+- url: https://app.swaggerhub.com/apis/laurenrasoanaivo/TD2-SWAGGE-STD21060/1.0.0
 paths:
-  #calendar : retourne le calendrier de projection de la semaine de la date donnée
-  # calculée mais non persistée
-  # Arrangement du calendrier : 
-  # Jour (lundi) - Heure (9:00) -> Film + Salle
   /rooms:
     get:
       tags:
